@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.yanghao.dataflow.mapper.DatabaseMapper">
+    <update id="createTable">
+        create table ${tableName}
+        <trim suffixOverrides=",">
+            <foreach collection="headList" item="fieldName" index="index" open="(" separator="," close=")">
+                <choose>
+                    <when test="index==0">
+                    ${fieldName} INT(10) PRIMARY KEY
+                    </when>
+                    <otherwise>
+                    ${fieldName} VARCHAR (20)
+                    </otherwise>
+                </choose>
+            </foreach>
+        </trim>
+    </update>
+
+    <insert id="insertData">
+        INSERT INTO ${tableName}
+        <trim>
+            <foreach collection="headList" item="fieldName" open="(" separator="," close=")">
+                ${fieldName}
+            </foreach>
+        </trim>
+        VALUES
+        <trim>
+            <foreach collection="dataList" item="data" open="(" separator="," close=")">
+                #{data}
+            </foreach>
+        </trim>
+    </insert>
+</mapper>
